@@ -1,11 +1,13 @@
 import express from "express";
 import { config } from "./config/env.js"
 import { pool } from "./config/db.js"
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 const PORT = config.port;
 
 app.use(express.json());
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
     res.send("API User Auth OK");
