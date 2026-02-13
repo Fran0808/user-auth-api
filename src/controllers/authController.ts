@@ -26,6 +26,7 @@ export const register = async (req: Request, res: Response) => {
         });
 
     } catch (error: any) {
+        console.error("Error in register controller:", error);
 
         if (error.message === "User already exists") {
             return res.status(409).json({
@@ -35,6 +36,7 @@ export const register = async (req: Request, res: Response) => {
 
         return res.status(500).json({
             message: "Internal server error",
+            error: error.message
         });
     }
 };
