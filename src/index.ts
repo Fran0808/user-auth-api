@@ -1,5 +1,6 @@
 import express from "express";
 import { config } from "./config/env.js"
+import { pool } from "./config/db.js"
 
 const app = express();
 const PORT = config.port;
@@ -13,3 +14,7 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+pool.connect()
+    .then(() => console.log("DB connected"))
+    .catch((err) => console.error("DB error:", err));
