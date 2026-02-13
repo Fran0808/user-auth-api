@@ -21,3 +21,4 @@ export const register = (req: Request, res: Response) => {
         data: { name, email }
     });
 };
+
