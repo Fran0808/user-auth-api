@@ -8,8 +8,8 @@ export const registerUser = async (name: string, email: string, password: string
         throw new Error("User already exists");
     }
 
-    const salRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, salRounds);
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = await createUser(name, email, hashedPassword);
 
