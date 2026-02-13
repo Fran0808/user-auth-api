@@ -14,7 +14,7 @@ function getEnvVariable(key: string): string {
 }
 
 export const config = {
-    port: process.env.DB_PORT || 3000,
+    port: process.env.PORT || 3000,
 
     db: {
         host: getEnvVariable("DB_HOST"),
