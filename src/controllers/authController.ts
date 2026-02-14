@@ -59,3 +59,12 @@ export const login = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const getProfile = async (req: Request, res: Response) => {
+    const user = (req as any).user;
+
+    return res.status(200).json({
+        message: "Profile data fetched successfully",
+        user
+    });
+}
