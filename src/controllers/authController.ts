@@ -1,23 +1,20 @@
 import type { Request, Response } from "express";
 import { registerUser } from "../services/authServices.js";
 import { loginUser } from "../services/authServices.js";
+import { registerSchema } from "../schemas/authSchema.js";
 
 export const register = async (req: Request, res: Response) => {
     try {
+        const validation = registerSchema.safeParse(req.body);
 
-        if (!req.body) {
+        if (!validation.success) {
             return res.status(400).json({
-                message: "No data sent",
+                message: "Validation failed",
+                errors: validation.error.issues
             });
         }
 
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-            return res.status(400).json({
-                message: "All fields are required"
-            });
-        }
+        const { name, email, password } = validation.data;
 
         const user = await registerUser(name, email, password);
 
