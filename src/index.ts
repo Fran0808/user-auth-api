@@ -2,10 +2,12 @@ import express from "express";
 import { config } from "./config/env.js"
 import { pool } from "./config/db.js"
 import authRoutes from "./routes/authRoutes.js";
+import { apiLimiter } from "./middlewares/rateLimiter.js";
 
 const app = express();
 const PORT = config.port;
 
+app.use(apiLimiter);
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 
