@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { registerUser } from "../services/authServices.js";
 import { loginUser } from "../services/authServices.js";
-import { registerSchema } from "../schemas/authSchema.js";
+import { loginSchema, registerSchema } from "../schemas/authSchema.js";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -41,7 +41,15 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     try {
-        const { email, password } = req.body;
+        const validation = loginSchema.safeParse(req.body);
+
+        if (!validation.success) {
+            return res.status(400).json({
+                message: "Login failed",
+                errors: validation.error.issues
+            });
+        }
+        const { email, password } = validation.data;
 
         const result = await loginUser(email, password);
 
