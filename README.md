@@ -27,7 +27,7 @@ A professional, secure, and scalable User Authentication API built with Node.js,
    ```
 
 2. **Setup environment variables**:
-   Copy the example environment file and fill in your values:
+   Copy the `.env.example` file, change its name to `.env` and then replace the data with your own configuration:
    ```bash
    cp .env.example .env
    ```
