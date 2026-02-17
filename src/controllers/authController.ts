@@ -1,9 +1,9 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { registerUser } from "../services/authServices.js";
 import { loginUser } from "../services/authServices.js";
 import { loginSchema, registerSchema } from "../schemas/authSchema.js";
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const validation = registerSchema.safeParse(req.body);
 
@@ -24,22 +24,14 @@ export const register = async (req: Request, res: Response) => {
         });
 
     } catch (error: any) {
-        console.error("Error in register controller:", error);
-
         if (error.message === "User already exists") {
-            return res.status(409).json({
-                message: error.message,
-            });
+            error.status = 409;
         }
-
-        return res.status(500).json({
-            message: "Internal server error",
-            error: error.message
-        });
+        next(error);
     }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const validation = loginSchema.safeParse(req.body);
 
@@ -56,20 +48,22 @@ export const login = async (req: Request, res: Response) => {
         res.status(200).json(result);
 
     } catch (error: any) {
-        console.error("Error in login controller:", error);
-
-        return res.status(500).json({
-            message: "Internal server error",
-            error: error.message
-        });
+        if (error.message === "Invalid credentials") {
+            error.status = 401;
+        }
+        next(error);
     }
 };
 
-export const getProfile = async (req: Request, res: Response) => {
-    const user = (req as any).user;
+export const getProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = (req as any).user;
 
-    return res.status(200).json({
-        message: "Profile data fetched successfully",
-        user
-    });
+        res.status(200).json({
+            message: "Profile data fetched successfully",
+            user
+        });
+    } catch (error) {
+        next(error);
+    }
 }
